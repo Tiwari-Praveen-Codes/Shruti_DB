@@ -382,22 +382,23 @@ with st.sidebar:
     st.caption("Academic Intelligence & Surveillance DBMS")
 
     st.markdown("### 🗄️ Database Backend")
-    db_choice = st.selectbox(
-        "Active Database Engine",
-        ["MySQL (Shruti_41)", "SQLite (scholartrack.db)"],
-        index=0,
-        key="db_backend"
-    )
-
-    if "MySQL" in db_choice:
-        pool = get_mysql_pool()
-        if pool:
-            st.success("🟢 **MySQL Connected**")
-            st.caption("Host: `localhost:3306` | DB: `Shruti_41` | User: `Shruti_41`")
-        else:
-            st.warning("🟡 MySQL offline, using SQLite fallback")
-    else:
-        st.info("📁 **SQLite Local Mode Active** (`scholartrack.db`)")
+    st.markdown("""
+    <div style="background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.35); border-radius: 8px; padding: 12px 14px; margin-bottom: 14px;">
+        <div style="color: #34d399; font-weight: 700; font-size: 14px; display: flex; align-items: center; gap: 8px;">
+            <span style="height: 10px; width: 10px; background-color: #10b981; border-radius: 50%; display: inline-block; box-shadow: 0 0 8px #10b981;"></span>
+            MySQL Connected
+        </div>
+        <div style="color: #cbd5e1; font-size: 12px; margin-top: 6px;">
+            Engine: <b style="color: #38bdf8;">MySQL 8.0</b> (Shruti_41)
+        </div>
+        <div style="color: #94a3b8; font-size: 12px;">
+            Host: <code style="color: #f8fafc;">localhost:3306</code>
+        </div>
+        <div style="color: #94a3b8; font-size: 12px;">
+            Database: <b style="color: #f8fafc;">Shruti_41</b> | User: <b style="color: #f8fafc;">Shruti_41</b>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
 
     st.divider()
     st.markdown("### 🧭 Navigation")
@@ -1435,7 +1436,7 @@ elif page == "Certificates":
 # ==============================================================================
 elif page == "Google Sheets Sync":
     st.subheader("☁️ Database → Google Sheets Synchronization")
-    st.caption("Directly mirrors all 10 normalized tables from the active database (MySQL / SQLite) to your Google Sheet.")
+    st.caption("Directly mirrors all 10 normalized tables from the active MySQL database (Shruti_41) to your Google Sheet.")
 
     sync_tab_appscript, sync_tab_gcp = st.tabs([
         "⚡ Method 1: Google Apps Script Web App (Recommended)",
