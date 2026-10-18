@@ -4,7 +4,14 @@ from datetime import date
 import pandas as pd
 import streamlit as st
 import altair as alt
-import mysql.connector
+try:
+    import mysql.connector
+    from mysql.connector import pooling
+    HAS_MYSQL = True
+except ImportError:
+    mysql = None
+    pooling = None
+    HAS_MYSQL = False
 
 # ==============================================================================
 # CONFIGURATION & PAGE SETUP
@@ -61,8 +68,6 @@ st.markdown("""
 
 SQLITE_DB = os.getenv("SCHOLARTRACK_DB", "scholartrack.db")
 
-from mysql.connector import pooling
-
 DEFAULT_APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyuRsnrpeDYGfS9lNt2wqhr-dGhpUVxJjgfrUE5Bw6dcbNMwXG5hb2Q0OEymgELCee_/exec"
 
 def get_apps_script_url():
@@ -78,6 +83,8 @@ MYSQL_DEFAULT_CONFIG = {
 
 @st.cache_resource
 def get_mysql_pool():
+    if not HAS_MYSQL or pooling is None:
+        return None
     try:
         return pooling.MySQLConnectionPool(
             pool_name="scholartrack_pool",
@@ -93,7 +100,7 @@ def get_mysql_pool():
 # ==============================================================================
 def get_db_connection():
     backend = st.session_state.get("db_backend", "MySQL (Shruti_41)")
-    if "MySQL" in backend:
+    if "MySQL" in backend and HAS_MYSQL and mysql is not None:
         pool = get_mysql_pool()
         if pool:
             try:
@@ -105,15 +112,12 @@ def get_db_connection():
             conn = mysql.connector.connect(**MYSQL_DEFAULT_CONFIG)
             return conn, "MySQL"
         except Exception:
-            c = sqlite3.connect(SQLITE_DB, check_same_thread=False)
-            c.execute("PRAGMA foreign_keys=ON")
-            c.row_factory = sqlite3.Row
-            return c, "SQLite"
-    else:
-        c = sqlite3.connect(SQLITE_DB, check_same_thread=False)
-        c.execute("PRAGMA foreign_keys=ON")
-        c.row_factory = sqlite3.Row
-        return c, "SQLite"
+            pass
+    # Local SQLite Fallback
+    c = sqlite3.connect(SQLITE_DB, check_same_thread=False)
+    c.execute("PRAGMA foreign_keys=ON")
+    c.row_factory = sqlite3.Row
+    return c, "SQLite"
 
 def read(sql, params=()):
     conn, mode = get_db_connection()
