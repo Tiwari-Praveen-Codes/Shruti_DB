@@ -381,26 +381,6 @@ with st.sidebar:
     st.markdown("## 🎓 ScholarTrack")
     st.caption("Academic Intelligence & Surveillance DBMS")
 
-    st.markdown("### 🗄️ Database Backend")
-    st.markdown("""
-    <div style="background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.35); border-radius: 8px; padding: 12px 14px; margin-bottom: 14px;">
-        <div style="color: #34d399; font-weight: 700; font-size: 14px; display: flex; align-items: center; gap: 8px;">
-            <span style="height: 10px; width: 10px; background-color: #10b981; border-radius: 50%; display: inline-block; box-shadow: 0 0 8px #10b981;"></span>
-            MySQL Connected
-        </div>
-        <div style="color: #cbd5e1; font-size: 12px; margin-top: 6px;">
-            Engine: <b style="color: #38bdf8;">MySQL 8.0</b> (Shruti_41)
-        </div>
-        <div style="color: #94a3b8; font-size: 12px;">
-            Host: <code style="color: #f8fafc;">localhost:3306</code>
-        </div>
-        <div style="color: #94a3b8; font-size: 12px;">
-            Database: <b style="color: #f8fafc;">Shruti_41</b> | User: <b style="color: #f8fafc;">Shruti_41</b>
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
-
-    st.divider()
     st.markdown("### 🧭 Navigation")
     page = st.radio(
         "Navigation",
